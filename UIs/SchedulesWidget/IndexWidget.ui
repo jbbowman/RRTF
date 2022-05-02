@@ -6,19 +6,18 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>116</width>
+    <width>200</width>
     <height>652</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>70</width>
+    <width>200</width>
     <height>0</height>
    </size>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget#IndexWidget {background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.1 rgba(212, 29, 29, 255), stop:0.14 rgba(200, 200, 200, 255));}
-</string>
+   <string notr="true">background-color: rgb(225, 225, 225);</string>
   </property>
   <layout class="QVBoxLayout" name="indexWidgetLayout">
    <property name="spacing">
@@ -36,8 +35,34 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
+   <item alignment="Qt::AlignHCenter">
+    <widget class="QLabel" name="actionsCenterLabel">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>50</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <family>Segoe UI Black</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Actions Center</string>
+     </property>
+    </widget>
+   </item>
    <item>
-    <widget class="QPushButton" name="schedulesButton">
+    <widget class="Line" name="line1">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="createButton">
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -46,7 +71,112 @@
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>Segoe UI Semibold</family>
+       <pointsize>9</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+	color: rgb(0, 0, 0);
+	border: none;
+}
+
+QPushButton::pressed {
+	background-color:rgb(200, 200, 200);
+}</string>
+     </property>
+     <property name="text">
+      <string>        Create             </string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>D:/jacbo/Downloads/create.png</normaloff>D:/jacbo/Downloads/create.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="editingButton">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>52</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <family>Segoe UI Semibold</family>
+       <pointsize>9</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+	color: rgb(0, 0, 0);
+	border: none;
+}
+
+QPushButton::pressed {
+	background-color:rgb(200, 200, 200);
+}</string>
+     </property>
+     <property name="text">
+      <string>    Enable Editing    </string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>D:/jacbo/Downloads/edit.png</normaloff>D:/jacbo/Downloads/edit.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="Line" name="line2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item alignment="Qt::AlignHCenter">
+    <widget class="QLabel" name="viewsLabel">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>50</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <family>Segoe UI Black</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Views</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="Line" name="line3">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="calendarButton">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>52</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <family>Segoe UI Semibold</family>
        <pointsize>9</pointsize>
       </font>
      </property>
@@ -57,20 +187,20 @@
 }
 
 QPushButton::checked {
-	background-color:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.1 rgba(0, 100, 0, 255), stop:0.14 rgba(0, 0, 0, 0));
+	background-color:rgb(200, 200, 200);
 }</string>
      </property>
      <property name="text">
-      <string/>
+      <string>      Calendar           </string>
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>../icons/calendar.png</normaloff>../icons/calendar.png</iconset>
+       <normaloff>../../icons/calendar.png</normaloff>../../icons/calendar.png</iconset>
      </property>
      <property name="iconSize">
       <size>
-       <width>32</width>
-       <height>32</height>
+       <width>21</width>
+       <height>21</height>
       </size>
      </property>
      <property name="checkable">
@@ -85,7 +215,7 @@ QPushButton::checked {
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="ordersButton">
+    <widget class="QPushButton" name="tableButton">
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -94,7 +224,7 @@ QPushButton::checked {
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>Segoe UI Semibold</family>
        <pointsize>9</pointsize>
       </font>
      </property>
@@ -105,20 +235,20 @@ QPushButton::checked {
 }
 
 QPushButton::checked {
-	background-color:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.1 rgba(0, 100, 0, 255), stop:0.14 rgba(0, 0, 0, 0));
+	background-color:rgb(200, 200, 200);
 }</string>
      </property>
      <property name="text">
-      <string/>
+      <string>        Table               </string>
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>../icons/map.png</normaloff>../icons/map.png</iconset>
+       <normaloff>../../icons/clipboard.png</normaloff>../../icons/clipboard.png</iconset>
      </property>
      <property name="iconSize">
       <size>
-       <width>32</width>
-       <height>32</height>
+       <width>24</width>
+       <height>24</height>
       </size>
      </property>
      <property name="checkable">
@@ -130,194 +260,14 @@ QPushButton::checked {
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="driversButton">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>52</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <family>Segoe UI</family>
-       <pointsize>9</pointsize>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton {
-	color: rgb(0, 0, 0);
-	border: none;
-}
-
-QPushButton::checked {
-	background-color:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.1 rgba(0, 100, 0, 255), stop:0.14 rgba(0, 0, 0, 0));
-}</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../icons/employees.png</normaloff>../icons/employees.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>29</width>
-       <height>29</height>
-      </size>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-     <property name="autoExclusive">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="vehiclesButton">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>52</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <family>Segoe UI</family>
-       <pointsize>9</pointsize>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton {
-	color: rgb(0, 0, 0);
-	border: none;
-}
-
-QPushButton::checked {
-	background-color:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.1 rgba(0, 100, 0, 255), stop:0.14 rgba(0, 0, 0, 0));
-}</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../icons/truck.png</normaloff>../icons/truck.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>35</width>
-       <height>35</height>
-      </size>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-     <property name="autoExclusive">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="reportsButton">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>52</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <family>Segoe UI</family>
-       <pointsize>9</pointsize>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton {
-	color: rgb(0, 0, 0);
-	border: none;
-}
-
-QPushButton::checked {
-	background-color:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.1 rgba(0, 100, 0, 255), stop:0.14 rgba(0, 0, 0, 0));
-}</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../icons/reports.png</normaloff>../icons/reports.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>28</width>
-       <height>28</height>
-      </size>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-     <property name="autoExclusive">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="settingsButton">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>52</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <family>Segoe UI</family>
-       <pointsize>9</pointsize>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton {
-	color: rgb(0, 0, 0);
-	border: none;
-}
-
-QPushButton::checked {
-	background-color:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.1 rgba(0, 100, 0, 255), stop:0.14 rgba(0, 0, 0, 0));
-}</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../icons/settings.png</normaloff>../icons/settings.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>34</width>
-       <height>34</height>
-      </size>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-     <property name="autoExclusive">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <spacer name="vSpacer">
+    <spacer name="vSpacer1">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>20</width>
-       <height>40</height>
+       <width>195</width>
+       <height>47</height>
       </size>
      </property>
     </spacer>

@@ -17,32 +17,21 @@ class OrdersWidget(QWidget):
         super(OrdersWidget, self).__init__()
         loadUi('UIs/OrdersWidget.ui', self)  # load OrdersWidget XML file
 
-        self.initOrdersMap()
-        self.initOrdersTable()
-        self.initSelectedTable()
-
-    # attach orders map to orders widget
-    def initOrdersMap(self):
-        self.OrdersMap = OrdersMap(9, (45.352281, -93.350444))
-        data = BytesIO()
-        self.OrdersMap.save(data, close_file=False)
-        webView = QWebEngineView()
-        webView.setHtml(data.getvalue().decode())
-        self.mapWidgetLayout.addWidget(webView)
-
-    # attach orders table to orders widget
-    def initOrdersTable(self):
+        self.OrdersMap = OrdersMap(self)
         self.OrdersSQL = OrdersSQL(self)
+
+        self.mapWidgetLayout.addWidget(self.OrdersMap)
         self.ordersTable.setModel(self.OrdersSQL)
 
-    # TODO attach selected orders table to orders widget
-    def initSelectedTable(self):
-        pass
 
-class OrdersMap(Map):
+class OrdersMap(QWebEngineView):
     # initialize orders map
-    def __init__(self, zoom_start, location):
-        super(OrdersMap, self).__init__(zoom_start=zoom_start, location=location)
+    def __init__(self, parent):
+        super(OrdersMap, self).__init__(parent)
+        map = Map(zoom_start=9, location=(45.352281, -93.350444))
+        data = BytesIO()
+        map.save(data, close_file=False)
+        self.setHtml(data.getvalue().decode())
 
 
 class OrdersSQL(QSqlTableModel):
@@ -65,8 +54,7 @@ if __name__ == "__main__":
     from PyQt5.QtWidgets import QApplication
 
     app = QApplication(sys.argv)
-    if not main.connectDB():
-        sys.exit(1)
+    main.DBConnection()
     win = OrdersWidget()
     win.show()
     sys.exit(app.exec_())
