@@ -3,7 +3,7 @@
 # import PyQt5
 from PyQt5.QtWidgets import QMainWindow, QWidget, QStackedWidget, QHBoxLayout, QVBoxLayout, QMessageBox
 from PyQt5.QtCore import Qt, QSize, QCoreApplication
-from PyQt5.QtSql import QSqlDatabase
+from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.uic import loadUi
 
@@ -39,6 +39,11 @@ class MainWindow(QMainWindow):
         self.CentralLayout.addLayout(self.MainLayout)
         self.MainLayout.addWidget(self.IndexWidget)
         self.MainLayout.addWidget(self.StackedWidget)
+
+    def closeEvent(self, *args, **kwargs):
+        super(QMainWindow, self).closeEvent(*args, **kwargs)
+        query = QSqlQuery()
+        query.exec('DELETE FROM Temp')
 
 
 #### Window Header
@@ -80,7 +85,7 @@ class StackedWidget(QStackedWidget):
         self.setStyleSheet("background-color: rgb(255, 255, 255);")
 
         widgets = (schedules.SchedulesWidget(), orders.OrdersWidget(), drivers.DriversWidget(),
-                   vehicles.VehiclesWidget())  #TODO reports.ReportsWidget()
+                   vehicles.VehiclesWidget())
 
         for i in range(len(widgets)):
             self.addWidget(widgets[i])
