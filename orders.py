@@ -35,7 +35,7 @@ class OrdersMap(QWebEngineView):
 
 
 class OrdersSQL(QSqlTableModel):
-    # initialize DB Orders table connection
+    # initialize DB Orders table CONNECTION
     def __init__(self, parent):
         super(QSqlTableModel, self).__init__(parent)
         self.setTable("Orders")

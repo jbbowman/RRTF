@@ -21,7 +21,7 @@ class DriversWidget(QWidget):
 
 
 class DriverSQL(QSqlTableModel):
-    # initialize DB driver table connection
+    # initialize DB driver table CONNECTION
     def __init__(self, parent):
         super(QSqlTableModel, self).__init__(parent)
         self.setTable("Driver")

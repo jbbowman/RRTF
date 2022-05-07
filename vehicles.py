@@ -21,7 +21,7 @@ class VehiclesWidget(QWidget):
 
 
 class VehicleSQL(QSqlTableModel):
-    # initialize DB vehicle table connection
+    # initialize DB vehicle table CONNECTION
     def __init__(self, parent):
         super(QSqlTableModel, self).__init__(parent)
         self.setTable("Vehicle")
