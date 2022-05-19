@@ -5,13 +5,14 @@ from PyQt5.QtCore import Qt
 
 
 class Table(QTableView):
-    def __init__(self):
-        super(Table, self).__init__()
+    def __init__(self, parent):
+        super(Table, self).__init__(parent)
         self.SQL = SQL(self)
 
         self.initUI()
 
     def initUI(self):
+        self.setStyleSheet("background-color: rgb(235, 235, 235);")
         self.setEditTriggers(self.DoubleClicked)
         self.setSelectionBehavior(self.SelectRows)
         self.setVerticalScrollMode(self.ScrollPerPixel)

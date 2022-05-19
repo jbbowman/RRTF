@@ -14,8 +14,8 @@ import map, database as db
 
 
 class CreateWidget(QWidget):
-    def __init__(self):
-        super(CreateWidget, self).__init__()
+    def __init__(self, parent):
+        super(CreateWidget, self).__init__(parent)
         self.SchedulesMap = SchedulesMap(self)
         self.initUI()
         self.connectButtons()
@@ -29,11 +29,32 @@ class CreateWidget(QWidget):
         self.MapLayout.addWidget(self.SchedulesMap)
 
     def connectButtons(self):
+        self.optimizeButton.clicked.connect(lambda: self.getTotalDrive())
         self.submitButton.clicked.connect(lambda: self.createSchedule())
+
+    def getTotalDrive(self):
+        if db.getValue('SELECT COUNT(*) FROM Temp;') != 0:
+            tableStack = db.getTable('SELECT invoiceID, streetAddress, city, state, zipCode FROM Temp;', 5)
+            tableStack.append([None, '21050 Lake George Blvd', 'Oak Grove', 'MN', '55303'])
+            totalDrive = 0
+
+            for i in range(len(tableStack)):
+                l1 = map.getCoords(tableStack[i - 1][1], tableStack[i - 1][2], tableStack[i - 1][3], tableStack[i - 1][4])
+                l2 = map.getCoords(tableStack[i][1], tableStack[i][2], tableStack[i][3], tableStack[i][4])
+                drive = map.getDriveTime(l1, l2)
+                db.query.exec(f'UPDATE Temp SET driveHours = {drive} WHERE invoiceID = {tableStack[i][0]};')
+                totalDrive += drive
+
+            self.driverHrsCount.setValue(totalDrive)
+            self.TempSQL.select()
+        else:
+            QMessageBox.critical(None, 'Error', f'No order selections have been made')
+
 
     def createSchedule(self):
         # add schedule to table
         if db.getValue('SELECT COUNT(*) FROM Temp;') != 0:
+            self.getTotalDrive()
             driverID = db.getValue(f"SELECT driverID FROM Driver WHERE lastName = '{self.driverSearch.currentText()}';")
             vehicleID = db.getValue(f"SELECT vehicleID FROM Vehicle WHERE name = '{self.vehicleSearch.currentText()}';")
             date = self.dateEdit.date().toString('yyyyddMM')
@@ -47,16 +68,12 @@ class CreateWidget(QWidget):
             # submit schedule, reset selection table
             if db.query.exec(f"INSERT INTO Schedule VALUES ({driverID}, {vehicleID}, '{date}', {stops}, {items}, "
                              f"{loadHours}, {workHours}, {driveHours}, '{notes}');"):
-
                 db.query.exec('UPDATE Orders SET scheduleID = SCOPE_IDENTITY() WHERE invoiceID IN (SELECT invoiceID '
                               'FROM Temp);')
-
                 db.query.exec(f"UPDATE Orders SET deliveryDate = '{date}' WHERE invoiceID IN (SELECT invoiceID FROM "
                               f"Temp);")
-
                 db.query.exec('UPDATE Orders SET Orders.driveHours = Temp.driveHours FROM Orders INNER JOIN Temp ON '
                               'Orders.invoiceID = Temp.invoiceID;')
-
                 db.query.exec('DELETE FROM Temp;')
 
                 self.TempSQL.select()
@@ -71,18 +88,11 @@ class CreateWidget(QWidget):
 
 class SchedulesMap(map.OrdersMap):
     def __init__(self, parent):
-        super(SchedulesMap, self).__init__()
+        super(SchedulesMap, self).__init__(parent)
         self.parent = parent
+        self.addMarkerEventListener()
         self.addPage()
-        self.setHtml(self.createMap())
-
-    def createMap(self):
-        foliumMap = Map(location=(45.352281, -93.350444), zoom_start=9)
-        data = BytesIO()
-        self.getMarkerPopup(foliumMap)
-        self.addMarkers(foliumMap)
-        foliumMap.save(data, close_file=False)
-        return data.getvalue().decode()
+        self.setHtml(self.createMap())  ###############################################################################################
 
     def addScheduleOrder(self, invoiceID):
         count = db.getValue('SELECT COUNT(invoiceID) FROM Temp;')
@@ -92,25 +102,14 @@ class SchedulesMap(map.OrdersMap):
             db.query.exec(f'INSERT INTO Temp SELECT invoiceID, orderDate, workHours, driveHours, firstName, lastName, '
                           f'phone, streetAddress, city, state, zipCode FROM Orders WHERE invoiceID = {invoiceID};')
 
-            tableStack = db.getTableStack('SELECT streetAddress, city, state, zipCode FROM Temp;', 4, 2)
-            l1 = map.getCoords(tableStack[0][0], tableStack[0][1], tableStack[0][2], tableStack[0][3])
-
-            if count == 0:  # add distance from company
-                l2 = map.getCoords('21050 Lake George Blvd', 'Oak Grove', 'MN', 55303)
-
-            else:  # add distance from previous order location
-                l2 = map.getCoords(tableStack[1][0], tableStack[1][1], tableStack[1][2], tableStack[1][3])
-
-            driveTime = map.getDriveTime(l1, l2)
-            db.query.exec(f'UPDATE Temp SET driveHours = {driveTime} WHERE invoiceID = {invoiceID};')
-
         else:  # remove order from selection table
             db.query.exec(f'DELETE FROM Temp WHERE invoiceID = {invoiceID};')
 
-        self.parent.driverHrsCount.setValue(db.getValue('SELECT SUM(driveHours) FROM Temp;'))
+        self.parent.TempSQL.select()
+
+    def addItems(self):
         self.parent.scheduleItems.setValue(db.getValue('SELECT COUNT(invoiceID) FROM OrderItem WHERE invoiceID IN '
                                                        '(SELECT invoiceID FROM Temp);'))
-        self.parent.TempSQL.select()
 
     def addPage(self):
         page = WebEnginePage(self)
@@ -126,6 +125,7 @@ class WebEnginePage(QWebEnginePage):
         if 'Invoice ID' in msg:
             invoiceID = int(msg.split()[2])
             self.parent.addScheduleOrder(invoiceID)
+            self.parent.addItems()
 
 
 class TempSQL(QSqlTableModel):

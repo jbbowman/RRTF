@@ -7,6 +7,7 @@ from PyQt5.uic import loadUi
 
 # import local modules
 import schedulesCalendar, schedulesTable, schedulesCreate
+from schedulesTable import SQL
 
 
 ##### Root Widget
@@ -15,7 +16,7 @@ class SchedulesWidget(QWidget):
         super(SchedulesWidget, self).__init__()
         self.SchedulesLayout = QHBoxLayout(self)
         self.StackedWidget = StackedWidget(self)
-        self.IndexWidget = IndexWidget(self, self.StackedWidget)
+        self.IndexWidget = IndexWidget(self)
 
         self.initUI()
 
@@ -29,34 +30,40 @@ class SchedulesWidget(QWidget):
 
 #### Selection Menu
 class IndexWidget(QWidget):
-    def __init__(self, parent, StackedWidget):
+    def __init__(self, parent):
         super(IndexWidget, self).__init__(parent)
+        self.parent = parent
+
         self.initUI()
-        self.connectButtons(StackedWidget)
+        self.connectButtons()
 
     def initUI(self):
         self.setAttribute(Qt.WA_StyledBackground)
         loadUi('UIs/SchedulesWidget/IndexWidget.ui', self)
 
-    def connectButtons(self, StackedWidget):
-        self.calendarButton.clicked.connect(lambda: StackedWidget.setCurrentIndex(0))
-        self.tableButton.clicked.connect(lambda: StackedWidget.setCurrentIndex(1))
-        self.createButton.clicked.connect(lambda: StackedWidget.setCurrentIndex(2))
+    def connectButtons(self):
+        self.calendarButton.clicked.connect(lambda: self.parent.StackedWidget.setCurrentIndex(0))
+        self.tableButton.clicked.connect(lambda: self.parent.StackedWidget.setCurrentIndex(1))
+        self.createButton.clicked.connect(lambda: self.parent.StackedWidget.setCurrentIndex(2))
+        self.refreshButton.clicked.connect(lambda: self.parent.StackedWidget.schedulesTable.SQL.select())
+        self.refreshButton.clicked.connect(lambda: self.parent.StackedWidget.CreateWidget.SchedulesMap.setHtml(self.parent.StackedWidget.CreateWidget.SchedulesMap.createMap()))
 
 
 #### Main Work Area
 class StackedWidget(QStackedWidget):
     def __init__(self, parent):
         super(StackedWidget, self).__init__(parent)
+        self.schedulesTable = schedulesTable.Table(self)
+        self.CreateWidget = schedulesCreate.CreateWidget(self)
+
         self.initUI()
 
     def initUI(self):
         self.setAttribute(Qt.WA_StyledBackground)
-        self.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.addWidgets()
 
     def addWidgets(self):
-        widgets = (schedulesCalendar.CalendarWidget(), schedulesTable.Table(), schedulesCreate.CreateWidget())
+        widgets = (schedulesCalendar.CalendarWidget(), self.schedulesTable, self.CreateWidget)
 
         for i in range(len(widgets)):
             self.addWidget(widgets[i])
